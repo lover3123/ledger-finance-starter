@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: ledger-api
+    runtime: node
+    plan: free
+    rootDir: apps/api
+    buildCommand: npm install && npm run build
+    startCommand: node dist/server.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false  # Set manually in Render dashboard
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CLIENT_ORIGIN
+        sync: false  # Set to your Vercel URL after deploying frontend
+      - key: APP_BASE_URL
+        sync: false  # Set to your Vercel URL after deploying frontend
+      - key: PAYMENT_PROVIDER
+        value: sandbox
+      - key: PORT
+        value: 10000
+      - key: UPLOAD_STORAGE
+        value: /tmp/uploads
+    autoDeploy: true
+    env: node
+    region: oregon

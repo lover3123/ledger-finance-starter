@@ -1,0 +1,16 @@
+{
+  "name": "ledger-finance",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev": "concurrently -k \"npm run dev -w apps/api\" \"npm run dev -w apps/web\"",
+    "db:up": "docker compose up -d mongo",
+    "db:down": "docker compose down",
+    "db:reset": "npm run db:seed -w apps/api",
+    "setup": "npm install && npm run db:seed -w apps/api",
+    "build": "npm run build -w packages/shared && npm run build -w apps/api && npm run build -w apps/web"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
