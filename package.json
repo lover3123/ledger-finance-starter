@@ -1,7 +1,13 @@
 {
   "name": "ledger-finance",
   "private": true,
-  "workspaces": ["apps/*", "packages/*"],
+  "engines": {
+    "node": "22.x"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev": "concurrently -k \"npm run dev -w apps/api\" \"npm run dev -w apps/web\"",
     "db:up": "docker compose up -d mongo",
