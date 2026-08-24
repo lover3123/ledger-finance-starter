@@ -59,6 +59,7 @@ export type PaymentRequestDTO = {
   amount: number;
   currency: string;
   reason: string;
+  merchantName?: string;
   description: string;
   type: PaymentType;
   dueDate?: string;
@@ -111,12 +112,15 @@ export type PayTransactionDTO = {
     authority: AuthorityVerification;
     receiverConfirmation: ReceiverConfirmation;
   };
-  debt: { debtorId: string; creditorId: string; kind: DebtKind } | null;
+  debt: { debtorId: string; creditorId: string; kind: DebtKind; status: LendingStatus; settledAmount?: number } | null;
   evidence: EvidenceDTO[];
   timeline: AuditEventDTO[];
   dueDate?: string;
   createdAt: string;
   updatedAt: string;
+  providerReference?: string;
+  netSentence?: string;
+  disputeReason?: string;
 };
 
 export type SettlementDTO = {

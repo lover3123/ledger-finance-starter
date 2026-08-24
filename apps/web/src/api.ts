@@ -104,7 +104,12 @@ export const api = {
       body: JSON.stringify(body),
       headers: idempotencyKey ? { "Idempotency-Key": idempotencyKey } : {}
     }),
-  getPaymentSession: (id: string) => request<{ id: string; sessionId: string; status: string; sandbox: boolean }>(`/api/payment-sessions/${id}`),
+  getPaymentSession: (id: string) => request<{
+    id: string; sessionId: string; requestId?: string; transactionId?: string;
+    merchantName: string; merchantUpiId: string; amount: number; upiIntent?: string;
+    provider: string; status: string; appLinks: { name: string; url: string }[];
+    sandbox: boolean; sandboxResult?: string;
+  }>(`/api/payment-sessions/${id}`),
   returnPaymentSession: (id: string, body: { result: string; upiTransactionReference?: string; providerResponse?: Record<string, unknown> }) =>
     request<{ session: { sessionId: string }; transactionStatus: string; verification: Record<string, string>; message: string; canSubmitEvidence?: boolean }>(`/api/payment-sessions/${id}/return`, { method: "POST", body: JSON.stringify(body) }),
   sandboxSimulate: (sessionId: string, result: string) =>
