@@ -1,5 +1,5 @@
 {
-    "buildCommand": "npm ci --include=dev && npm run build -w packages/shared && npm run build -w apps/web",
+    "buildCommand": "npm run build -w packages/shared && npm run build -w apps/web",
     "outputDirectory": "apps/web/dist",
     "installCommand": "npm ci --include=dev",
     "framework": "vite",

@@ -85,7 +85,8 @@ npx tsx src/db/seed.ts
 4. Configure:
    - **Framework Preset:** Vite
    - **Root Directory:** leave blank (repository root)
-   - **Build Command:** `npm ci --include=dev && npm run build -w packages/shared && npm run build -w apps/web`
+   - **Install Command:** `npm ci --include=dev`
+   - **Build Command:** `npm run build -w packages/shared && npm run build -w apps/web`
    - **Output Directory:** `apps/web/dist`
 5. Under **Environment Variables**, add:
    ```
