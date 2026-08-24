@@ -1,6 +1,7 @@
 # Deploy Ledger to the Cloud (Free)
 
 This guide deploys Ledger using free tiers on three platforms:
+
 - **MongoDB Atlas** — free M0 database (512MB)
 - **Render** — free API backend (Node.js)
 - **Vercel** — free frontend (React + Vite)
@@ -67,7 +68,9 @@ Save this — you'll need it in Step 3.
 8. Note your API URL: `https://ledger-api.onrender.com`
 
 ### Seed demo data:
+
 Go to Render dashboard → your service → **Shell** tab:
+
 ```bash
 npx tsx src/db/seed.ts
 ```
@@ -81,9 +84,9 @@ npx tsx src/db/seed.ts
 3. Import your GitHub repository
 4. Configure:
    - **Framework Preset:** Vite
-   - **Root Directory:** `apps/web`
-   - **Build Command:** `npm install && npm run build`
-   - **Output Directory:** `dist`
+   - **Root Directory:** leave blank (repository root)
+   - **Build Command:** `npm ci --include=dev && npm run build -w packages/shared && npm run build -w apps/web`
+   - **Output Directory:** `apps/web/dist`
 5. Under **Environment Variables**, add:
    ```
    VITE_API_URL = https://ledger-api.onrender.com
@@ -124,13 +127,14 @@ npx tsx src/db/seed.ts
 
 ## Free Tier Limits
 
-| Platform | Free Tier Limit |
-|----------|----------------|
-| MongoDB Atlas | 512MB storage, shared RAM |
-| Render | 750 hours/month, spins down after 15 min inactivity |
-| Vercel | 100GB bandwidth, unlimited static deploys |
+| Platform      | Free Tier Limit                                     |
+| ------------- | --------------------------------------------------- |
+| MongoDB Atlas | 512MB storage, shared RAM                           |
+| Render        | 750 hours/month, spins down after 15 min inactivity |
+| Vercel        | 100GB bandwidth, unlimited static deploys           |
 
 ### Render Sleep Warning
+
 The free Render service **spines down after 15 minutes of inactivity**. The first request after sleep takes ~30 seconds to wake up. This is normal for free tier.
 
 ---
@@ -150,23 +154,26 @@ git push
 ## Environment Variables Summary
 
 ### MongoDB Atlas
+
 - `MONGODB_URI` — connection string from Atlas dashboard
 
 ### Render (API)
-| Variable | Value | When to set |
-|----------|-------|-------------|
-| `NODE_ENV` | `production` | At creation |
-| `MONGODB_URI` | `mongodb+srv://...` | At creation |
-| `JWT_SECRET` | (auto-generated) | At creation |
-| `CLIENT_ORIGIN` | `https://your-app.vercel.app` | After frontend deploy |
-| `APP_BASE_URL` | `https://your-app.vercel.app` | After frontend deploy |
-| `PAYMENT_PROVIDER` | `sandbox` | At creation |
-| `PORT` | `10000` | At creation |
-| `UPLOAD_STORAGE` | `/tmp/uploads` | At creation |
+
+| Variable           | Value                         | When to set           |
+| ------------------ | ----------------------------- | --------------------- |
+| `NODE_ENV`         | `production`                  | At creation           |
+| `MONGODB_URI`      | `mongodb+srv://...`           | At creation           |
+| `JWT_SECRET`       | (auto-generated)              | At creation           |
+| `CLIENT_ORIGIN`    | `https://your-app.vercel.app` | After frontend deploy |
+| `APP_BASE_URL`     | `https://your-app.vercel.app` | After frontend deploy |
+| `PAYMENT_PROVIDER` | `sandbox`                     | At creation           |
+| `PORT`             | `10000`                       | At creation           |
+| `UPLOAD_STORAGE`   | `/tmp/uploads`                | At creation           |
 
 ### Vercel (Frontend)
-| Variable | Value | When to set |
-|----------|-------|-------------|
+
+| Variable       | Value                             | When to set |
+| -------------- | --------------------------------- | ----------- |
 | `VITE_API_URL` | `https://ledger-api.onrender.com` | At creation |
 
 ---
@@ -174,24 +181,29 @@ git push
 ## Troubleshooting
 
 ### "Cannot connect to API"
+
 - Check `VITE_API_URL` in Vercel environment variables
 - Ensure it starts with `https://`
 - Check Render logs for errors
 
 ### "Invalid token" after login
+
 - The JWT_SECRET changed on Render
 - Users need to re-login
 
 ### Render deployment fails
+
 - Check build logs in Render dashboard
 - Ensure `Root Directory` is blank so the workspace package `@ledger/shared` is available
 - Ensure the build command includes `npm ci --include=dev` so TypeScript type packages are installed
 - Node.js 20+ is required
 
 ### MongoDB connection fails
+
 - Ensure `0.0.0.0/0` is in Atlas Network Access
 - Check the password in the connection string (no special chars without URL encoding)
 - Ensure the database user was created in Atlas
 
 ### CORS errors in browser console
+
 - `CLIENT_ORIGIN` must exactly match your Vercel URL (including `https://`)
