@@ -46,10 +46,10 @@ Save this — you'll need it in Step 3.
 3. Connect your GitHub repository
 4. Fill in:
    - **Name:** `ledger-api`
-   - **Root Directory:** `apps/api`
+   - **Root Directory:** leave blank (repository root)
    - **Runtime:** `Node`
-   - **Build Command:** `npm install && npm run build`
-   - **Start Command:** `node dist/server.js`
+   - **Build Command:** `npm ci --include=dev && npm run build -w packages/shared && npm run build -w apps/api`
+   - **Start Command:** `node apps/api/dist/server.js`
    - **Plan:** Free
 5. Under **Environment Variables**, add:
    ```
@@ -184,7 +184,8 @@ git push
 
 ### Render deployment fails
 - Check build logs in Render dashboard
-- Ensure `ROOT_DIR` is set to `apps/api`
+- Ensure `Root Directory` is blank so the workspace package `@ledger/shared` is available
+- Ensure the build command includes `npm ci --include=dev` so TypeScript type packages are installed
 - Node.js 20+ is required
 
 ### MongoDB connection fails
