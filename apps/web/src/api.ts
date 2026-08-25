@@ -12,6 +12,7 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   const token = localStorage.getItem("ledger_token");
   const response = await fetch(`${API_URL}${path}`, {
     ...init,
+    cache: "no-store",
     headers: {
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),

@@ -60,6 +60,10 @@ app.use(cors({
   maxAge: 86400
 }));
 app.use(express.json({ limit: "1mb" }));
+app.use("/api", (_req, res, next) => {
+  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+  next();
+});
 app.use("/uploads", express.static(path.resolve(config.uploadDir), { maxAge: "1d" }));
 
 // ── Request logging ──────────────────────────────────────────────────────────
