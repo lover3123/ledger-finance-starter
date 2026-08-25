@@ -1,4 +1,5 @@
 import { Router, type Response } from "express";
+import mongoose from "mongoose";
 import { budgetSchema, categorySchema, transactionSchema, categoryPatchSchema, DEFAULT_CATEGORIES, type Dashboard, type Transaction } from "@ledger/shared";
 import type { Budget as BudgetDTO, Category as CategoryDTO } from "@ledger/shared";
 import { Budget as BudgetModel, Category as CategoryModel, PersonalTransaction, BalanceAdjustment, User } from "../models/index.js";
@@ -67,13 +68,14 @@ personalRouter.get("/api/dashboard", requireAuth, async (req: AuthedRequest, res
   const [year, monthIndex] = month.split("-").map(Number);
   const start = new Date(Date.UTC(year, monthIndex - 1, 1));
   const end = new Date(Date.UTC(year, monthIndex, 1));
-  const match = { userId: req.userId, occurredAt: { $gte: start, $lt: end } };
+  const userObjectId = new mongoose.Types.ObjectId(req.userId);
+  const match = { userId: userObjectId, occurredAt: { $gte: start, $lt: end } };
 
   const user = await User.findById(req.userId);
   const startingBalance = user?.startingBalance ?? 0;
 
   // Calculate all-time income/expenses for balance
-  const allTimeMatch = { userId: req.userId };
+  const allTimeMatch = { userId: userObjectId };
   const [allSums] = await PersonalTransaction.aggregate([
     { $match: allTimeMatch },
     {
